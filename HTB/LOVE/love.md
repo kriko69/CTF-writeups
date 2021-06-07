@@ -7,7 +7,7 @@
  vamos a realizar un escaneo con nmap:
 
 ```
-nmap -p- --open -T5 - v -n 10.10.10.239 -oG allPorts
+nmap -p- --open -T5 -v -n 10.10.10.239 -oG allPorts
 ```
 
 Vemos todos estos puertos abiertos:

