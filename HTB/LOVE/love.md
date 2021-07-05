@@ -1,6 +1,6 @@
  # LOVE MACHINE
  
- ![[Pasted image 20210603180544.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/1.png)
  
  ## enumeracion
  
@@ -12,7 +12,7 @@ nmap -p- --open -T5 -v -n 10.10.10.239 -oG allPorts
 
 Vemos todos estos puertos abiertos:
 
-![[Pasted image 20210603181030.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/2.png)
 
 Vamos a escanear los servicios y versiones:
 
@@ -115,13 +115,13 @@ hemos modificado el /etc/hosts para colocar la IP como love.htb
 
 El puerto 80 muestra esto:
 
-![[Pasted image 20210603190854.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/5.png)
 
 usa las siguientes tecnologias
 
-![[Pasted image 20210603190926.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/6.png)
 
-![[Pasted image 20210603191014.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/7.png)
 
 parece una pagina de votos
 
@@ -130,41 +130,41 @@ Intentado con admin - admin y otras credenciales no se pudo ingresar, vamos a ve
 
 el puerto 5000 muestra una pagina con codigo de estado 403 forbidden, eso quiere decir que no tenemos acceso pero si existe algo.
 
-![[Pasted image 20210603194319.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/13.png)
 
 Los puertos 5985,5986  47001 muestran el codigo de estado 404 not found
 
 El puerto 443 (https://love.htb/) un codigo de estado 403 (forbidden) eso quiere decir que no tenemos acceso pero si existe algo.
 
-![[Pasted image 20210603191612.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/8.png)
 
 En el certificado nos sale una alerta
 
-![[Pasted image 20210603191715.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/9.png)
 
 Si vemos en "security > view certificate" del certificado nos muestra un subdominio staging.love.htb
 
-![[Pasted image 20210603192706.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/10.png)
 
-![[Pasted image 20210603192739.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/11.png)
 
 guardamos este subdominio en /etc/hosts y lo abrimos en el navegador:
 
-![[Pasted image 20210603193130.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/12.png)
 
 Tenemos acceso a una pagina, si vamos a la opcion "demo" podemos ver un escaneador de url:
 
-![[Pasted image 20210603194655.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/14.png)
 
 veamos que pasa si en nuestra maquina habilitamos el servicio apache2 (sudo service apache2 start) y le pasamos nuestra direccion IP:
 
-![[Pasted image 20210603194824.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/15.png)
 
 No muestra el contenido de la maquina, como se encuentra en el servidor de la maquina love, si deberiamos tener acceso a las paginas con el codigo 403 forbidden, vamos a mandar lapagina que nos salia anteriormente forbidden (love.htb:5000/) pero para el equipo como ahi no esta seteado ese valor en su /etc/hosts y como esta pagina se encuentra en el servidor la direccion IP y igual a localhost (10.10.10.239 = 127.0.0.1):
 
 mandamos 127.0.0.1:5000
 
-![[Pasted image 20210603195518.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/16.png)
 
 Vemos unas credenciales que pertenece a administrador de la pagina de votos, vamos a ver con wfuzz si existe un directorio que sea del administrador:
 
@@ -172,21 +172,21 @@ Vemos unas credenciales que pertenece a administrador de la pagina de votos, vam
 wfuzz -c --hc=404 -w usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt http://love.htb/FUZZ
 ```
 
-![[Pasted image 20210603203422.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/17.png)
 
 vemos una ruta /admin donde se debe ingresar las credenciales:
 
-![[Pasted image 20210603203534.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/18.png)
 
 y accedemos:
 
-![[Pasted image 20210603203638.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/19.png)
 
 ## explotacion
 
 la pagina utilza php, eso a lo descubrimos con whatweb, toqueteando el portal al que accedimos encontramos un campo de upload en "profile > update":
 
-![[Pasted image 20210603204901.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/20.png)
 
 Probemos subir una reverrse shell en php, intente con la de monkey pentester pero no tuve exito asi que busque "php rerverse shell github" en google y me encontre con este rerpositorio:
 
@@ -195,9 +195,9 @@ Probemos subir una reverrse shell en php, intente con la de monkey pentester per
 dentro del repo utilice el que se encuentra en "src > 
 php_reverse_shell.php", lo modifique para colocar mi direccion IP yun puerto al que estare en escucha y lo subi al portal. Ademas nos pide la contraseña actual para subirlo (eso lo tenemos de la pagina donde vimos las credenciales)
 
-![[Pasted image 20210603205507.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/21.png)
 
-![[Pasted image 20210603205540.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/22.png)
 
 Y si nos ponemos en escucha en el puerto 4242 y subimos el exploit:
 
@@ -207,7 +207,7 @@ nc -lvnp 4242
 
 obtenemos una conexion como el usuario Phoebe::
 
-![[Pasted image 20210603205706.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/23.png)
 
 si vamos a la ruta desktop podemos ver la flag:
 
@@ -216,7 +216,7 @@ cd Users/Phoebe/Desktop
 type user.txt
 ```
 
-![[Pasted image 20210603210103.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/24.png)
  
   ## elevacion de privilegios
  
@@ -226,7 +226,7 @@ Haremos uso de la herramienta winPEAS para ver como podemos escalar privilegios,
 systeminfo
 ```
 
-![[Pasted image 20210603212343.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/25.png)
 
 entonces nos descargamos el binario (.exe) del winPEAS parra 64 bits del siguiente repositorio:
 
@@ -268,7 +268,7 @@ python3 -m http.server
  
  De toda la salida nos llama la atencion esto:
  
- ![[Pasted image 20210603213610.png]]
+  ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/26.png)
  
  Basicamente si estos 2 registros están **habilitados** (el valor es **0x1** ), los usuarios con cualquier privilegio pueden instalar (ejecutar) archivos .msi como NT AUTHORITY \\SYSTEM
  
@@ -307,7 +307,7 @@ python3 -m http.server
  
  obtenemos una rerverse shell como usuariio NT Authority\\System
  
- ![[Pasted image 20210603220104.png]]
+  ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/27.png)
  
  ahora podemos leer la flag
  
@@ -316,6 +316,6 @@ python3 -m http.server
  type root.txt
  ```
  
-  ![[Pasted image 20210603220243.png]]
+   ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LOVE/images/28.png)
  
  

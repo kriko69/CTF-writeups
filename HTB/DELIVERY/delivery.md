@@ -1,6 +1,6 @@
 # DELIVERY
 
-![[Pasted image 20210517180508.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/1.png)
 
 ## enumeracion
 
@@ -59,11 +59,11 @@ PORT     STATE SERVICE VERSION
 
 Tanto el puerto 80 como el  8065 son paginas web, veamos primero el 80:
 
-![[Pasted image 20210517180650.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/2.png)
 
 Vamos a helpdesk:
 
-![[Pasted image 20210517180721.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/3.png)
 
 No se nos interpreta porque tiene un subdominio helpdesk, vamos a agregarlo a /etc/hosts:
 
@@ -77,15 +77,15 @@ nano /etc/hosts
 
 ahora veremos la pagina de helpdesk:
 
-![[Pasted image 20210517180957.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/4.png)
 
 El wappalyzer indica que usa osTicket, un sistema de tickets:
 
 vamos a crear uno con el boton "Open a New Ticket":
 
-![[Pasted image 20210517181139.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/5.png)
 
-![[Pasted image 20210517181203.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/6.png)
 
 Vamos a llenar los datos:
 
@@ -101,7 +101,7 @@ Vamos a llenar los datos:
 
 Al llenar el formulario vamos a ver que se nos crea un ticket:
 
-![[Pasted image 20210517181516.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/7.png)
 
 Estos valores los vamos a guardar porque para algo serviran:
 
@@ -112,29 +112,29 @@ En la parte del inicio, donde existia la opcion para crear un ticket tambien se 
 
 Nos pide el correo con el que creamos el ticket y su id:
 
-![[Pasted image 20210517181802.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/8.png)
 
 Y le damos en view ticket:
 
-![[Pasted image 20210517181828.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/9.png)
 
 Parece algo como una bandeja de entrada.
 
 Veamos la pagina de inicio otra vez:
 
-![[Pasted image 20210517180650.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/2.png)
 
 Veamos que nos da el boton de contact us:
 
-![[Pasted image 20210517182031.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/10.png)
 
 Nos indica que si no estamos registrado, que en el apartado de helpdesk una vez que obtengamos un email con el "@delivery.htb" podemos acceder al Mattermost server. Ya tenemos ese correo con el ticket (7548135@delivery.htb). Entonces vamos a ver a donde nos lleva el MatterMost Server:
 
-![[Pasted image 20210517182348.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/11.png)
 
 Vemos un inicio de sesion, tenemos el correo pero no una contraseña asi que vamos a crearnos una cuenta en "Create one now":
 
-![[Pasted image 20210517182451.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/12.png)
 
 Ponemos los datos:
 
@@ -142,21 +142,21 @@ Ponemos los datos:
 * username: kriko6969
 * password Kriko6969!
 
-![[Pasted image 20210517182612.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/13.png)
 
 No indica que nos envio un correo para verificar la cuenta, veamos en el apartado de tickets que parecia un buzon:
 
 Despues de recargar nos aparece esto:
 
-![[Pasted image 20210517182713.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/14.png)
 
 Asi que para activar vamos a la ruta subrayada:
 
-![[Pasted image 20210517182802.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/15.png)
 
 Ahora ponemos la contraseña Kriko6969!:
 
-![[Pasted image 20210517182856.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/16.png)
 
 Y estamos adentro.
 
@@ -170,21 +170,21 @@ Y vemos una palabra clave entre comillas **"PleaseSubscribe!"** y nos indica que
 
 Recordemos que el puerto 22 ssh estaba abieto asi que veamos si podemos conectarnos:
 
-![[Pasted image 20210517183317.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/17.png)
 
 Y estamos dentro, podemos ver la user.txt:
 
-![[Pasted image 20210517183445.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/18.png)
 
 ## elevacion de privilegios
 
 Vamos a la ruta de /opt y ahi veremos que esta el servidor de mattermost y unos archivos de configuracion:
 
-![[Pasted image 20210517183616.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/19.png)
 
 Vamos a ver unas credenciales de base de datos mysql:
 
-![[Pasted image 20210517183711.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/20.png)
 
 Intentemos conectarnos:
 
@@ -217,7 +217,7 @@ hashid
 (pegamos hash)
 ```
 
-![[Pasted image 20210517185133.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/21.png)
 
 Al parecer es bcrypt, vamos a utilizar hashcat para realizar el crackeo.
 
@@ -230,7 +230,7 @@ more para verlo en formato more
 grep bcrypt para ver que tipo de modulo usa
 ```
 
-![[Pasted image 20210517185443.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/22.png)
 
 Como ven si es bcrypt ya que hashcat indica que el formato es **$2*$...**
 El modulo es el 3200. Vamos a hacer un ataque con diccionario pero si recuerdan se daba una pista que que la contraseña era una variacion de **PleaseSubscribe!** que no se halla en rockyou (un diccionario famoso en CTF)
@@ -274,7 +274,7 @@ hashcat -a 0 -m 3200 hash dict
 
 Vemos que encontró la contraseña, es **PleaseSubscribe!21**
 
-![[Pasted image 20210517204940.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/23.png)
 
 entonces si nos cambiamos al usuario root y ponemos esa clave ya somos root:
 
@@ -284,6 +284,6 @@ su root
 PleaseSubscribe!21
 ```
 
-![[Pasted image 20210517205116.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/24.png)
 
 

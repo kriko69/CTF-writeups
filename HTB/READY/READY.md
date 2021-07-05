@@ -1,6 +1,6 @@
 # READY MACHINE
 
-![[Pasted image 20210520150647.png]]
+ ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/READY/images/1.png)
 
 ## ENUMERACION
 

