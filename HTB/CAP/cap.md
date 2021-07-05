@@ -2,7 +2,7 @@
 
 **Autor: Christian Jimenez**
 
-![logo](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/cap.png)
+![logo](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/images/1.png)
 
 ## ESCANEO Y ENUMERACION
 
@@ -14,7 +14,7 @@ nmap -p- --open -T5 - v -n 10.10.10.245 -oG allPorts
 
 La salida nos muesta el puerto 21, 22 y 80 abiertos:
 
-![[Pasted image 20210607110547.png]]
+![Uso de extract ports](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/images/2.png)
 
 Vamos a realizar una enumeracion de los servicios en los puertos:
 
@@ -146,21 +146,21 @@ el ssh no creo que se explote mas bien nos debe permitir conectarnos una vez enc
 
 vamos a ver la pagina web
 
-![[Pasted image 20210607110959.png]]
+![Contenido de la pagina web](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/images/3.png)
 
 vemos como un dashboard donde ya estamos dentro como el usuario **"nathan"**
 
 si vamos a las 3 rayas del menu y la opcion de **"Security snapshot (5 second PCAP + Analysis)"** vemos 
 
-![[Pasted image 20210607111245.png]]
+![Contenido de la pagina web](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/images/4.png)
 
 vemos como unas unas capturas de wireshark, porque en el titulo dice pcap y es la extension de una captura de datos, y al finalizar un boton para descargar el archivo pcap:
 
-![[Pasted image 20210607111450.png]]
+![Contenido de la pagina web](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/images/5.png)
 
 lo mas interesante es en la url que pone el id de la captura:
 
-![[Pasted image 20210607111524.png]]
+![Contenido de la pagina web](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/images/6.png)
 
 jugando que este valor, revisando las capturas de valor valores, la mas interesante se encuentra en el valor 0:
 
@@ -187,7 +187,7 @@ tshark -r 0.pcap 2>/dev/null
 
 vamos leyendo el contenido y encontramos unas credenciales del protocolo ftp:
 
-![[Pasted image 20210607111955.png]]
+![Captura de trafico](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/images/7.png)
 
 nos indica login successful, vamos a conectarnos por ftp:
 
@@ -199,7 +199,7 @@ pass: Buck3tH4TF0RM3!
 
 vemos que estamos dentro y ahi se encuentra la flag:
 
-![[Pasted image 20210607112139.png]]
+![Conexion por FTP](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/images/8.png)
 
 pero vamos a probar por ssh ya que el puerto estaba abierto.
 
@@ -208,9 +208,9 @@ ssh nathan@10.10.10.245
 pass: Buck3tH4TF0RM3!
 ```
 
-Vemops que las credenciales tambien funcionan para ssh y ya podemos bver la flag user.txt:
+Vemops que las credenciales tambien funcionan para ssh y ya podemos ver la flag user.txt:
 
-![[Pasted image 20210607172509.png]]
+![Conexion por SSH](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/images/10.png)
 
 ## ELEVACION DE PRIVILEGIOS
 
@@ -229,7 +229,7 @@ getcap -r / 2>/dev/null
 
 ```
 
-![[Pasted image 20210607173110.png]]
+![Enumeracion de capabilities](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/images/11.png)
 
 La capabilitie que mas nos interesa es la **cap_setuid** que nos permite ejecutar el programa con privilegios del administrador sea el o no el propietario.
 
@@ -241,7 +241,7 @@ Vemos que el programa python 3.8 tiene esa capabilitie en tonces podriamos spawn
 
 y seriamos root y podemos ver la flag:
 
-![[Pasted image 20210607173612.png]]
+![Abuso de capabilities](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/images/12.png)
 
 ## PLUS
 
