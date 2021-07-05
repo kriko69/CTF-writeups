@@ -2,7 +2,7 @@
 
 **Autor: Christian Jimenez**
 
-![[Pasted image 20210607110433.png]]
+![cap.png](cap.png)
 
 ## ESCANEO Y ENUMERACION
 
