@@ -2,7 +2,7 @@
 
 **Autor: Christian Jimenez**
 
-![cap.png](cap.png)
+![logo](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/cap.png)
 
 ## ESCANEO Y ENUMERACION
 
