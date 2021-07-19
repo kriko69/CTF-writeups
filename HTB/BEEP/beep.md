@@ -2,7 +2,7 @@
 
 **Autor: Christian Jimenez**
 
-![logo](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/1.png)
+![logo](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/1.PNG)
 
 ## ESCANEO Y ENUMERACION
 
@@ -14,7 +14,7 @@ nmap -p- --open -T5 -v -n 10.10.10.7 -oG allPorts
 
 La salida nos muesta los puertos 22,25,80,110,111,143,443,879,993,995,3306,4190,4445,4559,5038,10000 abiertos:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/2.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/2.PNG)
 
 Vamos a realizar una enumeracion de los servicios en los puertos:
 
@@ -91,17 +91,17 @@ y esta es la salida:
 
 son muchos puertos asi que vamos a empezar con el 80, si ingresamos a la pagina vemos que tiene un certificado autofirmado y es un panel de login:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/3.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/3.PNG)
 
 Buscamos credenciales por defecto pero ninguna funciono.
 
 La enumeracion de directorios con wfuzz mostró algunas carpetas pero no fue de mucha ayuda al revisar cada una.
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/4.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/4.PNG)
 
 En el login muestra el servicio que esta alojado en la pagina (elastix), no tenemos la version pero buscamos en searchsploit de todas formas: 
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/5.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/5.PNG)
 
 Vemos varios resultados, pero en este caso intentando con el Local File Inclusion se tiene algo interesante.
 
@@ -111,7 +111,7 @@ Vemos varios resultados, pero en este caso intentando con el Local File Inclusio
 
 si examinamos el exploit de local file inclusion se una ruta que podemos probar:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/6.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/6.PNG)
 
 colocamos esa ruta junto a la direccion IP en el navegador:
 
@@ -121,11 +121,11 @@ https://10.10.10.7/vtigercrm/graph.php?current_language=../../../../../../../../
 
 Y obtenemos lo siguiente:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/7.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/7.PNG)
 
 Para darle un mejor formato hacemos Ctrl+u y si bajamos vemos unas credenciales:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/8.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/8.PNG)
 
 podemos leer diferentes archivos con el LFI y se tiene 2 usuarios potenciales donde se cree que esta la flag: root y fannis. Auque se podria entrar como otro usuario y hacer un movimiento lateral , se tiene el puerto 22 abierto y si intentamos con root o fannis y la contraseña encontrada en el LFI tenemos exito con root:
 
@@ -138,7 +138,7 @@ ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@10.10.10.7
 
 El parametro **-oKexAlgorithms=+diffie-hellman-group1-sha1** es porque nos daba un error de negociacion de claves.
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/9.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/9.PNG)
 
 Ok eso fue demasiado sencillo, pero se puede explotar de mas formas.
 
@@ -146,15 +146,15 @@ Ok eso fue demasiado sencillo, pero se puede explotar de mas formas.
 
 Vemos que estaba el puerto 10000 abierto con un servicio http:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/10.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/10.PNG)
 
 si ingresamos vemos un panel de inicio de sesion:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/11.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/11.PNG)
 
 si colocamos admin y password (o cualquier otra credencial) nos dice que es incorrecto pero en la url veo que se agrega un archivo **session_login.gci**: 
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/12.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/12.PNG)
 
 cuando se ve un archivo de tipo .cgi se puede probar el ataque shellshock, esto si la shell es vulnerable.
 
@@ -199,11 +199,11 @@ Entonces volviendo a la maquina, si con burpsuite interceptamos la peticion que 
 
 interceptamos la peticion poniendo cualquier dato y modificarmos esa cabecera:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/13.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/13.PNG)
 
 si ahora eso lo mandamo por el repiter y nos colocamos en escucha con netcat:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/14.png)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/14.PNG)
 
 Vemos que tenemos ejecucion remota de comandos como Root y ya podriamos leer las flags.
 
