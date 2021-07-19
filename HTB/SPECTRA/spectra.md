@@ -421,7 +421,7 @@ vemos que esta ejecutando comandos a nivel de sistema, entonces podemos intentar
 
 colocamos lo siguiente en la plantilla que es una plantilla de monkey pentester:
 
-![monkey pentester](http://pentestmonkey.net/tools/web-shells/php-reverse-shell)
+[monkey pentester](http://pentestmonkey.net/tools/web-shells/php-reverse-shell)
 
 a la plantilla solo se cambia los siguiente:
 
