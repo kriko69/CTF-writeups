@@ -2,7 +2,7 @@
 
 **Autor: Christian Jimenez**
 
-![logo](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/1.PNG)
+![logo](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/1.PNG)
 
 ## ESCANEO Y ENUMERACION
 
@@ -14,7 +14,7 @@ nmap -p- --open -T5 - v -n 10.129.145.157 -oG allPorts
 
 La salida nos muesta el puerto 22 y 80 abiertos:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/2.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/2.PNG)
 
 Vamos a realizar una enumeracion de los servicios en los puertos:
 
@@ -22,23 +22,23 @@ Vamos a realizar una enumeracion de los servicios en los puertos:
 nmap -p22,80 -sV -sC 10.129.145.157 -oN targeted
 ```
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/3.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/3.PNG)
 
 Es claro que tenemos que enfrentarnos a una pagina web, vamos a abrir en el navegador:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/4.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/4.PNG)
 
 El wappalyzer muestra lo siguiente:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/5.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/5.PNG)
 
 si nos vamos a la pestaña de portal vemos por la url que interpreta el lenguaje PHP:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/6.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/6.PNG)
 
 Si vamos al link que nos dice la pagina vemos lo siguiente:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/7.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/7.PNG)
 
 Antes de analizar esto,veamos si hay algun recurso disponible mas con wfuzz:
 
@@ -48,15 +48,15 @@ wfuzz -c -t 300 --hw=1470 --hc=404 -w /usr/share/dirbuster/wordlists/directory-l
 
 Vemos que hay una ruta **resources**, veamos que hay ahi:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/8.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/8.PNG)
 
 Leamos el readme:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/9.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/9.PNG)
 
 Parece una pista pero nada interesante, leamos ahora el bountylog.js, cualquier archivo de log siempre es importante:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/10.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/10.PNG)
 
 Parece una estructura en xml que se envia, parece que es la estructura con la que envia en ese formulario del portal que vimos.
 
@@ -68,7 +68,7 @@ wfuzz -c -t 300 --hw=1470 --hc=404 -w /usr/share/dirbuster/wordlists/directory-l
 
 Y encontramos un archivo PHP potencial de base de datos:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/11.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/11.PNG)
 
 No podemos leer su contenido, a no ser que encontremos una vulnerabilidad de LFI, XSS o XXE, esta ultima es la que estoy pensando por ese archivo que vimos con la estructura de xml.
 
@@ -76,23 +76,23 @@ No podemos leer su contenido, a no ser que encontremos una vulnerabilidad de LFI
 
 Vamos a llenar ese formulario del portal y vamos a abrirnos el burpsuite para ver como se mandan esos datos. Deberia mandarse como la estructura de los logs ya que tiene los mismos campos:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/7.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/7.PNG)
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/10.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/10.PNG)
 
 mandamos cualquier valor en el formulario y lo interceptamos con el burpsuite:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/12.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/12.PNG)
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/13.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/13.PNG)
 
 Vemos que se manda una data encriptada, el tipo de encriptacion parece url encode por el valor **%3D** que representa un **=**. Podemos usar la pestaña de decoder de burpsuite para desencriptarlo:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/14.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/14.PNG)
 
 Ahora parece un base64 por los **\=\=**  del final, vamos a hacer un decode en base64:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/15.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/15.PNG)
 
 Vemos que se manda una estructura como el de los logs, cuando se manda informacion en XML o se puede cargar un XML en una pagina web, podemos testear el ataque de XXE (XML External Entity).
 
@@ -119,7 +119,7 @@ En este ejemplo leemos el archivo **/etc/passwd** y la carga util (**xxe;**) se 
 file:///etc/passwd
 /etc/passwd
 ../../../../../../etc/passwd
-etc
+etc.
 ```
 
 el que funciono para ver el archivo /etc/passwd es el siguiente:
@@ -139,9 +139,9 @@ el que funciono para ver el archivo /etc/passwd es el siguiente:
 
 Mediante el decoder de burpsuit podemos codficarlo primero en base64 y luego en urlencode para despues mediante el repeater mandarlo como data:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/16.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/16.PNG)
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/17.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/17.PNG)
 
 Vemos el contenido del /etc/passwd en que observamos los usuarios del sistema, hay uno que tiene opcion a consola, eso se lo verifica al final de cada usuario, deberia decir /bin/bash y el usuario **development** lo tiene.
 
@@ -164,11 +164,11 @@ el payload quedaria de la siguiente manera:
 
 con este filtro **php://filter/convert.base64-encode/resource=** sile especificamos un archivo del servidor ya sea db.php o ../../../../db.php podemos obtener su contenido en base64. lo codificamos nuevamente y lomandamos por el repeater:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/18.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/18.PNG)
 
 Nos muestra el contenido encodeado, si lo copiamos y vamos al decoder y los desciframos:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/19.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/19.PNG)
 
 Vemos una credenciales de base de datos del usuario admin, no estaba el puerto de MySQL u otro DBMS abierto y el usuario admin no lo vimos en el /etc/passwd.
 
@@ -182,7 +182,7 @@ ssh development@10.10.11.100
 
 Estamos dentro y podemos leer la flag.
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/20.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/20.PNG)
 
 
 ## ELEVACION DE PRIVILEGIOS
@@ -195,11 +195,11 @@ sudo -l
 
 vemos algo interesante:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/21.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/21.PNG)
 
 podemos ejecutar un script con python3, si tuvieramos permisos de escritura en ese script seria pan comido, pero no es asi:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/22.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/22.PNG)
 
 Pero podemos ver que es lo que hace:
 
@@ -211,7 +211,7 @@ vamos a explicar por partes:
 
 tenemos la funcion **main()**:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/23.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/23.PNG)
 
 - Vemos que nos pide el path de un ticket.
 - guarda la salida de la funcion **load_ticket()** en una variable ticket.
@@ -220,14 +220,14 @@ tenemos la funcion **main()**:
 
 veamos ahora la funcion **load()**:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/24.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/24.PNG)
 
 - verifica si el la ruta que se pasa como parametro tiene la extension .md.
 - si es asi retorna el contenido y sino muestra un mensaje de error.
 
 Y por ultimo la funcion **evaluate()**:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/25.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/25.PNG)
 
 - verifica el contenido del archivo .md que se le pasa como parametro.
 - verifica si comienza con **# Skytrain Inc** mediante la funcion **startswith()**.
@@ -289,7 +289,7 @@ o
 Ahora vamos a crear un archivo .md que cumpla lo que pide para llegar a la funcion **eval()**:
 
 CREACION DEL ARCHIVO .md
-m19RoAU0hP41A1sTsq6K
+
 * verifica si comienza con **# Skytrain Inc** mediante la funcion **startswith()**.
 
 ```markdown
@@ -329,13 +329,13 @@ La ultima linea es donde esta lo bueno, si hacemos un **replace** nuevamente de 
 
 A la funcion **eval()** para que ejecute otra expresion podriamos mandarle que ejecute condiciones booleanas como de un condicional, con **and** concatenamos otra expresion. Se mando la siguiente estructura:
 
-```
+```bash
 (x+y==z) and (a==b)
 ```
 
 pero representado de la siguiente manera:
 
-```
+```bash
 102+1==103 and __import__('os').system('whoami')==False
 ```
 
@@ -354,7 +354,7 @@ Donde **validationNumber** es el resultado de lo que enviamos al **eval()** y ob
 
 Colocamos todo ese contenido a un archivo llamado **test.md** o como quieran llamarlo, ejecutamos el script como sudo y mencionamos la ruta del archivo test.md:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/26.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/26.PNG)
 
 Como ven se ejecuto el comando.
 
@@ -367,7 +367,7 @@ __Ticket Code:__
 **102+1==103 and __import__('os').system('chmod +4755 /bin/bash')==False
 ```
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/27.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/27.PNG)
 
 No muestra ninguna salida el comando en si.
 
@@ -377,7 +377,7 @@ Pero si comprobamos:
 ls -la /bin/bash
 ```
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/28.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/28.PNG)
 
 y si hacemos un:
 
@@ -387,5 +387,5 @@ y si hacemos un:
 
 Ya somos root y podemos ver la flag:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/29.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/29.PNG)
 
