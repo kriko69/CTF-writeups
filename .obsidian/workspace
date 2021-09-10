@@ -1,0 +1,95 @@
+{
+  "main": {
+    "id": "c32681928f7459b7",
+    "type": "split",
+    "children": [
+      {
+        "id": "dcac8cae723b2c54",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "HTB/DEVEL/devel.md",
+            "mode": "source"
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "c30a9e5cc37d3f5d",
+    "type": "split",
+    "children": [
+      {
+        "id": "ff6cd6f13f479b6c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5b9e08af39388c50",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "fb4c8f25fb4fb8bd",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "4cfb9fc13bafd214",
+    "type": "split",
+    "children": [
+      {
+        "id": "116bd3ee0fa8f67a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3640b9e5c13f26bf",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "HTB/DEVEL/devel.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "dcac8cae723b2c54",
+  "lastOpenFiles": [
+    "HTB/DEVEL/devel.md",
+    "HTB/LAME/lame.md",
+    "HTB/DEVEL/Untitled.md"
+  ]
+}
