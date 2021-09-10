@@ -19,7 +19,7 @@ La salida nos muesta los sigueinets puertos:
 Vamos a realizar una enumeracion de los servicios en los puertos:
 
 ```
-nmap -p21,22, -sV -sC 10.10.10.3 -oN targeted
+nmap -p21,22,139,445,3632 -sV -sC 10.10.10.3 -oN targeted
 ```
 
 este es el resultado:
