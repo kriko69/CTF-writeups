@@ -84,14 +84,14 @@ python3 -m pip install .
 de acuerdo a con que version de python instalaste impacket ejecutas python o python3:
 
 ```bash
-python send_and_execute.py 10.10.10.4 shell.py
+python send_and_execute.py 10.10.10.4 shell.exe
 ```
 
 estamos dentro como root y podemos ver la flag:
 
 ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LEGACY/images/5.PNG)
 
-### MS-08-067
+### MS08-067
 
 hay un script en github que nos ayudara: [https://github.com/areyou1or0/OSCP/blob/master/Scripts%20-%20MS08-067](https://github.com/areyou1or0/OSCP/blob/master/Scripts%20-%20MS08-067)
 
