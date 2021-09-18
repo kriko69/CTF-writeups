@@ -89,6 +89,8 @@ capturamos la peticion a "http://10.10.10.56/cgi-bin/user.sh" y modificamos el u
 
 nos colocamos en la escucha en netcat y mandamos la peticion y obtenemos una reverse shell:
 
+![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SHOCKER/images/17.png)
+
 ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SHOCKER/images/12.png)
 
 podemos ver la flag:
