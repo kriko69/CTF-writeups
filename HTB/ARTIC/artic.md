@@ -1,4 +1,4 @@
-#  BUFF MACHINE
+#  ARTIC MACHINE
 
 **Autor: Christian Jimenez**
 
