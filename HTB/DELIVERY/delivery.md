@@ -2,6 +2,12 @@
 
 ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/DELIVERY/images/1.png)
 
+## INDEX
+
+- [[#enumeracion|enumeracion]]
+- [[#explotacion|explotacion]]
+- [[#elevacion de privilegios|elevacion de privilegios]]
+
 ## enumeracion
 
 ```

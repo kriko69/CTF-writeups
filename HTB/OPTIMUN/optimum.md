@@ -5,6 +5,15 @@
 
 ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/OPTIMUN/images/1.png)
 
+## INDEX
+
+- [[#ESCANEO Y ENUMERACION|ESCANEO Y ENUMERACION]]
+- [[#EXPLOTACION|EXPLOTACION]]
+	- [[#PASANDONOS A UNA POWERSHELL|PASANDONOS A UNA POWERSHELL]]
+- [[#ELEVACION DE PRIVILEGIOS|ELEVACION DE PRIVILEGIOS]]
+	- [[#NOTA|NOTA]]
+
+
 ## ESCANEO Y ENUMERACION
 
 vamos a realizar un escaneo con nmap:

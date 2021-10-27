@@ -4,6 +4,14 @@
 
 ![logo](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/CAP/images/1.png)
 
+## INDEX
+
+- [[#ESCANEO Y ENUMERACION|ESCANEO Y ENUMERACION]]
+- [[#EXPLOTACION|EXPLOTACION]]
+- [[#ELEVACION DE PRIVILEGIOS|ELEVACION DE PRIVILEGIOS]]
+- [[#PLUS|PLUS]]
+
+
 ## ESCANEO Y ENUMERACION
 
 vamos a realizar un escaneo con nmap:

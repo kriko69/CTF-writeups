@@ -4,6 +4,13 @@
 
 ![logo](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BOUNTYHUNTER/images/1.PNG)
 
+## INDEX
+
+- [[#ESCANEO Y ENUMERACION|ESCANEO Y ENUMERACION]]
+- [[#EXPLOTACION|EXPLOTACION]]
+- [[#ELEVACION DE PRIVILEGIOS|ELEVACION DE PRIVILEGIOS]]
+
+
 ## ESCANEO Y ENUMERACION
 
 vamos a realizar un escaneo con nmap:

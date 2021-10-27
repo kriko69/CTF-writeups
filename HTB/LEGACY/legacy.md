@@ -4,6 +4,14 @@
 
 ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/LEGACY/images/1.PNG)
 
+## INDEX
+
+- [[#ESCANEO Y ENUMERACION|ESCANEO Y ENUMERACION]]
+- [[#EXPLOTACION|EXPLOTACION]]
+	- [[#MS-17-010|MS-17-010]]
+	- [[#MS08-067|MS08-067]]
+
+
 ## ESCANEO Y ENUMERACION
 
 vamos a realizar un escaneo con nmap:

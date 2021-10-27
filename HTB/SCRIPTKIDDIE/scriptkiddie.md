@@ -4,6 +4,13 @@
 
 ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/SCRIPTKIDDIE/images/1.png)
 
+## INDEX
+
+- [[#ESCANEO Y ENUMERACION|ESCANEO Y ENUMERACION]]
+- [[#EXPLOTACION|EXPLOTACION]]
+- [[#ESCALA DE PRIVILEGIOS|ESCALA DE PRIVILEGIOS]]
+
+
 ## ESCANEO Y ENUMERACION
 
 vamos a realizar un escaneo con nmap:

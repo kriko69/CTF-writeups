@@ -4,6 +4,14 @@
 
 ![logo](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/BEEP/images/1.PNG)
 
+## INDEX
+
+- [[#ESCANEO Y ENUMERACION|ESCANEO Y ENUMERACION]]
+- [[#EXPLOTACION|EXPLOTACION]]
+	- [[#LOCAL FILE INCLUSION|LOCAL FILE INCLUSION]]
+	- [[#SHELLSHOCK|SHELLSHOCK]]
+
+
 ## ESCANEO Y ENUMERACION
 
 vamos a realizar un escaneo con nmap:

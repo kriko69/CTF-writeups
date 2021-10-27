@@ -2,6 +2,13 @@
 
 ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/ARMAGEDDON/images/1.png)
 
+## INDEX
+
+- [[#ENUMERACION|ENUMERACION]]
+- [[#EXPLOTACION|EXPLOTACION]]
+- [[#ESCALA DE PRIVILEGIOS|ESCALA DE PRIVILEGIOS]]
+
+
 ## ENUMERACION
 
 ```

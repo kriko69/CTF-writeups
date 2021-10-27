@@ -2,6 +2,16 @@
 
 ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/KNIFE/images/1.png)
 
+## INDEX
+
+- [[#ENUMERACION|ENUMERACION]]
+- [[#EXPLOTACION|EXPLOTACION]]
+	- [[#FORMAS DE HACER BANNER GRABBING|FORMAS DE HACER BANNER GRABBING]]
+- [[#ELEVACION DE PRIVILEGIOS|ELEVACION DE PRIVILEGIOS]]
+	- [[#OPCION 2|OPCION 2]]
+- [[#NOTA|NOTA]]
+
+
 ## ENUMERACION
 
 Vemos que puertos abiertos tiene

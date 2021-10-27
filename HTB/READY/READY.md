@@ -1,6 +1,13 @@
 # READY MACHINE
 
  ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/READY/images/1.png)
+ 
+ ## INDEX
+ 
+ - [[#ENUMERACION|ENUMERACION]]
+- [[#EXPLOTACION|EXPLOTACION]]
+- [[#ESCALACION DE PRIVILEGIOS|ESCALACION DE PRIVILEGIOS]]
+
 
 ## ENUMERACION
 
