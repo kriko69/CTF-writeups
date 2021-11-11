@@ -2,9 +2,10 @@
  
  ![foto](https://raw.githubusercontent.com/kriko69/CTF-writeups/main/HTB/PREVISE/images/1.png)
  
- ## INDEX
- 
-
+ - [[#enumeracion|enumeracion]]
+- [[#explotacion|explotacion]]
+	- [[#movimiento lateral|movimiento lateral]]
+- [[#elevacion de privilegios|elevacion de privilegios]]
 
  
  ## enumeracion
